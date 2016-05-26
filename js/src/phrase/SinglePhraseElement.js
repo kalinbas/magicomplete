@@ -7,13 +7,18 @@ var __extends = (this && this.__extends) || function (d, b) {
 var PhraseElementBase_1 = require('./PhraseElementBase');
 var SinglePhraseElement = (function (_super) {
     __extends(SinglePhraseElement, _super);
-    function SinglePhraseElement() {
-        _super.apply(this, arguments);
+    function SinglePhraseElement(options) {
+        _super.call(this);
+        this.options = options;
     }
+    SinglePhraseElement.prototype.getOptions = function () {
+        return this.options;
+    };
     SinglePhraseElement.prototype.connectToNodes = function (input) {
         var output = [];
         return output;
     };
     return SinglePhraseElement;
 }(PhraseElementBase_1.default));
-exports.SinglePhraseElement = SinglePhraseElement;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = SinglePhraseElement;

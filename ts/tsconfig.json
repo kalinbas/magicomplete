@@ -27,7 +27,12 @@
         "./src/tokens/CheckAndRemoveResult.ts",
         "./src/tokens/LookupToken.ts",
         "./src/tokens/NumberToken.ts",
+        "./src/tokens/StringToken.ts",
         "./src/tokens/TokenBase.ts",
+        "./test/phrase/PhraseTest.ts",
+        "./typings/assertion-error/assertion-error.d.ts",
+        "./typings/chai/chai.d.ts",
+        "./typings/mocha/mocha.d.ts",
         "./typings/node/node.d.ts",
         "./typings/tsd.d.ts"
     ],

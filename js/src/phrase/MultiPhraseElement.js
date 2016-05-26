@@ -7,13 +7,18 @@ var __extends = (this && this.__extends) || function (d, b) {
 var PhraseElementBase_1 = require('./PhraseElementBase');
 var MultiPhraseElement = (function (_super) {
     __extends(MultiPhraseElement, _super);
-    function MultiPhraseElement() {
-        _super.apply(this, arguments);
+    function MultiPhraseElement(options) {
+        _super.call(this);
+        this.options = options;
     }
+    MultiPhraseElement.prototype.getOptions = function () {
+        return this.options;
+    };
     MultiPhraseElement.prototype.connectToNodes = function (input) {
         var output = [];
         return output;
     };
     return MultiPhraseElement;
 }(PhraseElementBase_1.default));
-exports.MultiPhraseElement = MultiPhraseElement;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = MultiPhraseElement;

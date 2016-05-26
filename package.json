@@ -5,7 +5,7 @@
   "main": "js/index.js",
   "typings": "js/index",
   "scripts": {
-    "test": "mocha ts/test --recursive"
+    "test": "mocha js/test --recursive"
   },
   "repository": {
     "type": "git",
