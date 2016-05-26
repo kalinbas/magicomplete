@@ -1,0 +1,37 @@
+{
+    "version": "1.5.0-alpha",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "preserveConstEnums": true,
+        "declaration": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "../js"
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./index.ts",
+        "./src/phrase/MultiPhraseElement.ts",
+        "./src/phrase/Phrase.ts",
+        "./src/phrase/PhraseElementBase.ts",
+        "./src/phrase/SinglePhraseElement.ts",
+        "./src/Service.ts",
+        "./src/TokenNode.ts",
+        "./src/tokens/AutocompleteToken.ts",
+        "./src/tokens/CheckAndRemoveResult.ts",
+        "./src/tokens/LookupToken.ts",
+        "./src/tokens/NumberToken.ts",
+        "./src/tokens/TokenBase.ts",
+        "./typings/node/node.d.ts",
+        "./typings/tsd.d.ts"
+    ],
+    "atom": {
+        "rewriteTsconfig": true
+    }
+}
