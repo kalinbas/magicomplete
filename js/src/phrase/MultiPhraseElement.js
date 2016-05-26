@@ -6,6 +6,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var TokenNode_1 = require('../TokenNode');
 var PhraseElementBase_1 = require('./PhraseElementBase');
+var ArrayUtil_1 = require('../util/ArrayUtil');
 var MultiPhraseElement = (function (_super) {
     __extends(MultiPhraseElement, _super);
     function MultiPhraseElement(options) {
@@ -19,7 +20,7 @@ var MultiPhraseElement = (function (_super) {
         var _this = this;
         var output = [];
         for (var count = Math.max(1, this.options.min); count <= this.options.max; count++) {
-            var permutations = [this.options.elements];
+            var permutations = ArrayUtil_1.default.permutateArrayN(this.options.elements, count);
             permutations.forEach(function (permutation) {
                 if (!_this.options.isOrdered || _this.checkOrder(permutation, _this.options.elements)) {
                     var previousChildren_1 = input;

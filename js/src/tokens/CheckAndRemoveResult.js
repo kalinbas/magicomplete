@@ -1,6 +1,11 @@
 "use strict";
 var CheckAndRemoveResult = (function () {
     function CheckAndRemoveResult() {
+        this.autocomplete = [];
+        this.continuation = null;
+        this.capture = null;
+        this.isValid = false;
+        this.isAnything = false;
     }
     return CheckAndRemoveResult;
 }());

@@ -3,9 +3,17 @@ export default class Service {
     private options;
     root: TokenNode;
     constructor(options: IServiceOptions);
-    addTree(node: TokenNode, attachToNode: TokenNode): void;
+    search(text: string): ServiceResult;
+    private addTree(node, attachToNode);
 }
 export interface IServiceOptions {
     phrases: string[];
-    tokens: any;
+    tokens?: any;
+}
+export declare class ServiceResult {
+    isReady: boolean;
+    isInvalid: boolean;
+    isAnything: boolean;
+    autocomplete: string[];
+    captures: any;
 }

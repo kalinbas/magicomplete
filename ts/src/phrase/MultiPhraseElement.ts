@@ -1,6 +1,7 @@
 import TokenNode from '../TokenNode';
 import TokenBase from '../tokens/TokenBase';
 import PhraseElementBase from './PhraseElementBase';
+import ArrayUtil from '../util/ArrayUtil';
 
 export default class MultiPhraseElement extends PhraseElementBase {
 
@@ -16,7 +17,7 @@ export default class MultiPhraseElement extends PhraseElementBase {
     var output = [];
 
     for (let count = Math.max(1, this.options.min); count <= this.options.max; count++) {
-        let permutations = [this.options.elements]; //TODO
+        let permutations = ArrayUtil.permutateArrayN(this.options.elements, count);
         permutations.forEach(permutation => {
           if (!this.options.isOrdered || this.checkOrder(permutation, this.options.elements)) {
             let previousChildren = input;
@@ -46,8 +47,7 @@ export default class MultiPhraseElement extends PhraseElementBase {
     return output;
   }
 
-  checkOrder(toCheck:PhraseElementBase[], original:PhraseElementBase[])
-  {
+  checkOrder(toCheck:PhraseElementBase[], original:PhraseElementBase[]) {
       let lastIndex:number = -1;
       toCheck.forEach(item => {
         let index = original.indexOf(item);
