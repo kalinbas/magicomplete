@@ -15,6 +15,18 @@ export default class SinglePhraseElement extends PhraseElementBase {
   connectToNodes(input:TokenNode[]):TokenNode[] {
     var output = [];
 
+    input.forEach(node => {
+
+      let child = new TokenNode();
+      child.token = this.options.token;
+      child.key = this.options.key;
+      node.children.push(child);
+      
+      if (this.options.isOptional) {
+        output.push(node);
+      }
+      output.push(child);
+    });
 
     return output;
   }

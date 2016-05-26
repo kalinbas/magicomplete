@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var TokenNode_1 = require('../TokenNode');
 var PhraseElementBase_1 = require('./PhraseElementBase');
 var SinglePhraseElement = (function (_super) {
     __extends(SinglePhraseElement, _super);
@@ -15,7 +16,18 @@ var SinglePhraseElement = (function (_super) {
         return this.options;
     };
     SinglePhraseElement.prototype.connectToNodes = function (input) {
+        var _this = this;
         var output = [];
+        input.forEach(function (node) {
+            var child = new TokenNode_1.default();
+            child.token = _this.options.token;
+            child.key = _this.options.key;
+            node.children.push(child);
+            if (_this.options.isOptional) {
+                output.push(node);
+            }
+            output.push(child);
+        });
         return output;
     };
     return SinglePhraseElement;
