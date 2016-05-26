@@ -1,4 +1,6 @@
-[MagiComplete](https://github.com/kalinbas/magicomplete)
+[![Build Status](https://travis-ci.org/kalinbas/magicomplete.svg?branch=master)](https://travis-ci.org/kalinbas/magicomplete)
+
+MagiComplete
 ====================
 This will be a complete, fully tested natural language autocomplete library written in TypeScript.
 
