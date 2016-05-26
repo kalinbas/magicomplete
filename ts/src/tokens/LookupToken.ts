@@ -1,4 +1,5 @@
-import * from './TokenBase';
+import TokenBase from './TokenBase';
+import CheckAndRemoveResult from './CheckAndRemoveResult';
 
 export default class LookupToken extends TokenBase {
 

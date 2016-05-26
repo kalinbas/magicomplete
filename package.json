@@ -12,14 +12,18 @@
     "url": "git+https://github.com/kalinbas/magicomplete.git"
   },
   "keywords": [
-	"natural language form",
-	"autocomplete",
-	"typescript"
+    "natural language form",
+    "autocomplete",
+    "typescript"
   ],
   "author": "kalinbas@gmail.com",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kalinbas/magicomplete/issues"
   },
-  "homepage": "https://github.com/kalinbas/magicomplete#readme"
+  "homepage": "https://github.com/kalinbas/magicomplete#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3"
+  }
 }

@@ -1,4 +1,5 @@
 import TokenBase from './TokenBase';
+import CheckAndRemoveResult from './CheckAndRemoveResult';
 
 export default class AutocompleteToken extends TokenBase {
 
