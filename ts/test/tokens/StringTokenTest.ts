@@ -8,12 +8,12 @@ import CheckAndRemoveResult from '../../src/tokens/CheckAndRemoveResult';
  */
 describe('StringToken', () => {
   it('should do autocomplete', () => {
-    let token = new StringToken({ value : "foo"});
+    let token = new StringToken({ values : ["foo"]});
     let res = token.checkAndRemove("f");
     expect(res.autocomplete[0]).to.eq("foo");
   });
   it('should do autocomplete + fix', () => {
-    let token = new StringToken({ value : "foo"});
+    let token = new StringToken({ values : ["foo"]});
     let res = token.checkAndRemove("fa");
     expect(res.autocomplete[0]).to.eq("foo");
   });

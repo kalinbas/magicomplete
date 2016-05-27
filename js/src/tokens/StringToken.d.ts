@@ -6,5 +6,5 @@ export default class StringToken extends TokenBase {
     checkAndRemove(text: string): CheckAndRemoveResult;
 }
 export interface IStringTokenOptions {
-    value: string;
+    values: string[];
 }

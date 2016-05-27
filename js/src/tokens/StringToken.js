@@ -15,22 +15,24 @@ var StringToken = (function (_super) {
     }
     StringToken.prototype.checkAndRemove = function (text) {
         var result = new CheckAndRemoveResult_1.default();
-        if (text.indexOf(this.options.value) === 0) {
-            result.isValid = true;
-            result.capture = this.options.value;
-            result.continuation = text.substr(this.options.value.length);
-        }
-        if (text.length < this.options.value.length) {
-            if (this.options.value.indexOf(text) === 0) {
-                result.autocomplete.push(this.options.value);
+        this.options.values.forEach(function (val) {
+            if (text.indexOf(val) === 0) {
+                result.isValid = true;
+                result.capture = val;
+                result.continuation = text.substr(val.length);
             }
-            else {
-                var dist = StringUtil_1.default.levenshteinDistance(text, this.options.value.substr(0, text.length));
-                if (dist <= 2) {
-                    result.autocomplete.push(this.options.value);
+            if (text.length < val.length) {
+                if (val.indexOf(text) === 0) {
+                    result.autocomplete.push(val);
+                }
+                else {
+                    var dist = StringUtil_1.default.levenshteinDistance(text, val.substr(0, text.length));
+                    if (dist <= 2) {
+                        result.autocomplete.push(val);
+                    }
                 }
             }
-        }
+        });
         return result;
     };
     return StringToken;

@@ -14,6 +14,22 @@ var NumberToken = (function (_super) {
     }
     NumberToken.prototype.checkAndRemove = function (text) {
         var result = new CheckAndRemoveResult_1.default();
+        var regex = new RegExp('^(\d*\.?\d+)');
+        var match = regex.exec(text);
+        if (match) {
+            var num = parseInt(match[1], 10);
+            if (num >= this.options.min && num <= this.options.max) {
+                result.isValid = true;
+                result.capture = match[1];
+                result.continuation = text.substr(match[1].length);
+            }
+            else if (num < this.options.min) {
+                result.autocomplete.push(this.options.min + "");
+            }
+            else if (num > this.options.max) {
+                result.autocomplete.push(this.options.max + "");
+            }
+        }
         return result;
     };
     return NumberToken;

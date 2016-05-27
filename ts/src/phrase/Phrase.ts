@@ -53,7 +53,7 @@ export default class Phrase {
               let blockText = i === text.length - 1 ? text.substr(lastBlockStart) : text.substr(lastBlockStart, i - lastBlockStart);
               blockText = blockText.trim();
               if (blockText.length > 0) {
-                currentOrPart.push(new SinglePhraseElement({ token : new StringToken( { value : blockText }), isOptional : false, key : null }));
+                currentOrPart.push(new SinglePhraseElement({ token : new StringToken( { values : [blockText] }), isOptional : false, key : null }));
               }
             }
 
@@ -148,7 +148,7 @@ export default class Phrase {
               min = Math.max(Math.min(childElements.length, min), 0);
               max = Math.max(Math.min(childElements.length, max), 0);
 
-              // TODO simplification to single phrase element if possible...              
+              // TODO simplification to single phrase element if possible...
               currentOrPart.push(new MultiPhraseElement({ elements : childElements, isOrdered: isOrdered, isOptional: isOptional, min: min, max: max }))
             }
             //set new block starting point

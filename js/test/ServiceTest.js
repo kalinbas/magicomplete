@@ -18,7 +18,7 @@ describe('Service', function () {
         chai_1.expect(result.captures).to.be.empty;
     });
     it('should do simple search with optionals', function () {
-        var token = new StringToken_1.default({ value: "a movie" });
+        var token = new StringToken_1.default({ values: ["a movie"] });
         var service = new Service_1.default({ phrases: [
                 "i want to see {token:token1} {token:token2}"
             ], tokens: { token: token } });

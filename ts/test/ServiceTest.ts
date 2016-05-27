@@ -24,7 +24,7 @@ describe('Service', () => {
 
   it('should do simple search with optionals', () => {
 
-    let token = new StringToken({ value : "a movie"});
+    let token = new StringToken({ values : ["a movie"]});
 
     let service = new Service({ phrases: [
       "i want to see {token:token1} {token:token2}"

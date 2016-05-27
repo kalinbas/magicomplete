@@ -17,12 +17,12 @@ describe('Phrase', function () {
         chai_1.expect(function () { return new Phrase_1.default("{test}", {}); }).to.throw(Error);
     });
     it('should catch named token', function () {
-        var phrase = new Phrase_1.default("{test}", { test: new StringToken_1.default({ value: '...' }) });
+        var phrase = new Phrase_1.default("{test}", { test: new StringToken_1.default({ values: ['...'] }) });
         chai_1.expect(phrase.element).to.be.an.instanceof(SinglePhraseElement_1.default);
         chai_1.expect(phrase.element.getOptions().token).to.be.an.instanceof(StringToken_1.default);
     });
     it('should work with string and token', function () {
-        var phrase = new Phrase_1.default("test {test}", { test: new StringToken_1.default({ value: '...' }) });
+        var phrase = new Phrase_1.default("test {test}", { test: new StringToken_1.default({ values: ['...'] }) });
         chai_1.expect(phrase.element).to.be.an.instanceof(MultiPhraseElement_1.default);
         chai_1.expect(phrase.element.getOptions().isOptional).to.be.false;
         chai_1.expect(phrase.element.getOptions().isOrdered).to.be.true;
@@ -30,7 +30,7 @@ describe('Phrase', function () {
         chai_1.expect(phrase.element.getOptions().max).to.equal(2);
     });
     it('should work with token and string', function () {
-        var phrase = new Phrase_1.default("{test} test", { test: new StringToken_1.default({ value: '...' }) });
+        var phrase = new Phrase_1.default("{test} test", { test: new StringToken_1.default({ values: ['...'] }) });
         chai_1.expect(phrase.element).to.be.an.instanceof(MultiPhraseElement_1.default);
     });
     it('should create | element correctly', function () {
@@ -55,7 +55,7 @@ describe('Phrase', function () {
         chai_1.expect(phrase.element.getOptions().elements[0]).to.be.an.instanceof(SinglePhraseElement_1.default);
     });
     it('should work with mixed elements', function () {
-        var phrase = new Phrase_1.default("(test1) test2 {test} test3 (test4)", { test: new StringToken_1.default({ value: '...' }) });
+        var phrase = new Phrase_1.default("(test1) test2 {test} test3 (test4)", { test: new StringToken_1.default({ values: ['...'] }) });
         chai_1.expect(phrase.element.getOptions().elements).to.have.length(5);
     });
     it('should work with options', function () {
@@ -77,7 +77,7 @@ describe('Phrase', function () {
         chai_1.expect(phrase.element).to.be.an.instanceof(MultiPhraseElement_1.default);
     });
     it('should work with everything', function () {
-        var phrase = new Phrase_1.default("(i want to find|i'm looking for) {test:capture1} movies (from the year {test:capture2}|with {test:capture3}|ordered by (asc|desc)?)?{0,2}", { test: new StringToken_1.default({ value: '...' }) });
+        var phrase = new Phrase_1.default("(i want to find|i'm looking for) {test:capture1} movies (from the year {test:capture2}|with {test:capture3}|ordered by (asc|desc)?)?{0,2}", { test: new StringToken_1.default({ values: ['...'] }) });
         chai_1.expect(phrase.element.getOptions().elements).to.have.length(4);
     });
 });

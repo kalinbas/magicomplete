@@ -32,7 +32,7 @@ var Phrase = (function () {
                         var blockText = i === text.length - 1 ? text.substr(lastBlockStart) : text.substr(lastBlockStart, i - lastBlockStart);
                         blockText = blockText.trim();
                         if (blockText.length > 0) {
-                            currentOrPart.push(new SinglePhraseElement_1.default({ token: new StringToken_1.default({ value: blockText }), isOptional: false, key: null }));
+                            currentOrPart.push(new SinglePhraseElement_1.default({ token: new StringToken_1.default({ values: [blockText] }), isOptional: false, key: null }));
                         }
                     }
                     if (c === '|') {
