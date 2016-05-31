@@ -1,12 +1,12 @@
-export {default as Service} from "./src/Service";
+export {default as Service} from "./lib/Service";
 
-import Service from "./src/Service";
+import Service from "./lib/Service";
 
-import LookupToken from "./src/tokens/LookupToken";
-import NumberToken from "./src/tokens/NumberToken";
-import AutocompleteToken from "./src/tokens/AutocompleteToken";
+import StringToken from "./lib/tokens/StringToken";
+import NumberToken from "./lib/tokens/NumberToken";
+import AutocompleteToken from "./lib/tokens/AutocompleteToken";
 
-let genreToken = new LookupToken({values:['adventure', 'action', 'fantasy']});
+let genreToken = new StringToken({values:['adventure', 'action', 'fantasy']});
 let yearToken = new NumberToken({min:1900, max:2016});
 let actorToken = new AutocompleteToken({ source : q => {
   // TODO fake remote call

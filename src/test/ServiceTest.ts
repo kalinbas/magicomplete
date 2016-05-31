@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 
-import Service from '../src/Service';
-import StringToken from '../src/tokens/StringToken';
+import Service from '../lib/Service';
+import StringToken from '../lib/tokens/StringToken';
 
 /**
  * Unit tests

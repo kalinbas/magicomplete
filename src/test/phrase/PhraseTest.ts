@@ -1,10 +1,10 @@
 import {expect} from 'chai';
 
-import SinglePhraseElement from '../../src/phrase/SinglePhraseElement';
-import MultiPhraseElement from '../../src/phrase/MultiPhraseElement';
-import Phrase from '../../src/phrase/Phrase';
+import SinglePhraseElement from '../../lib/phrase/SinglePhraseElement';
+import MultiPhraseElement from '../../lib/phrase/MultiPhraseElement';
+import Phrase from '../../lib/phrase/Phrase';
 
-import StringToken from '../../src/tokens/StringToken';
+import StringToken from '../../lib/tokens/StringToken';
 
 
 /**

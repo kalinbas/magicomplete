@@ -1,0 +1,18 @@
+{   
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "sourceMap": true,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "preserveConstEnums": true,
+        "declaration": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "../build"
+    },
+    "exclude": [
+        "../node_modules",
+        "../build"
+    ]
+}

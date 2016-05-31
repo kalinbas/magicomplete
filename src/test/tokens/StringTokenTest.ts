@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 
-import StringToken from '../../src/tokens/StringToken';
-import CheckAndRemoveResult from '../../src/tokens/CheckAndRemoveResult';
+import StringToken from '../../lib/tokens/StringToken';
+import CheckAndRemoveResult from '../../lib/tokens/CheckAndRemoveResult';
 
 /**
  * Unit tests

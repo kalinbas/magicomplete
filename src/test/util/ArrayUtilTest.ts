@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 
-import ArrayUtil from '../../src/util/ArrayUtil';
+import ArrayUtil from '../../lib/util/ArrayUtil';
 
 /**
  * Unit tests
