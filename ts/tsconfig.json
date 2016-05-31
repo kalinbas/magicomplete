@@ -26,7 +26,6 @@
         "./src/TokenNode.ts",
         "./src/tokens/AutocompleteToken.ts",
         "./src/tokens/CheckAndRemoveResult.ts",
-        "./src/tokens/LookupToken.ts",
         "./src/tokens/NumberToken.ts",
         "./src/tokens/StringToken.ts",
         "./src/tokens/TokenBase.ts",
