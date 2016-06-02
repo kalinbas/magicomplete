@@ -1,5 +1,5 @@
 // use service from magicomplete library
-var service = new Service.Service({ phrases: ["test|other|whatever"], tokens: {} });
+var service = new magicomplete.Service({ phrases: ["test|other|whatever"], tokens: {} });
 
 $(function () {
     var options = [];
