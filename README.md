@@ -3,14 +3,13 @@
 
 MagiComplete
 ====================
-This will be a complete, fully tested natural language autocomplete library written in TypeScript.
+This will soon be a complete, fully tested natural language autocomplete library written in TypeScript.
 
 It is done as a learning project for npm library / node.js / typescript development.
 
-
 Demo (best way to get the full experience)
 ---------------------
-http://demo
+http://kalinbas.github.io/magicomplete
 
 
 Included token types
