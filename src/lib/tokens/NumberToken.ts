@@ -24,7 +24,7 @@ export default class NumberToken extends TokenBase {
       }
     }
 
-    return result;
+    return Promise.resolve(result);
   }
 }
 

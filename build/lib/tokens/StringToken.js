@@ -33,7 +33,7 @@ var StringToken = (function (_super) {
                 }
             }
         });
-        return result;
+        return Promise.resolve(result);
     };
     return StringToken;
 }(TokenBase_1.default));

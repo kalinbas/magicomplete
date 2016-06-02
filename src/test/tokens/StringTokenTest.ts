@@ -7,15 +7,20 @@ import CheckAndRemoveResult from '../../lib/tokens/CheckAndRemoveResult';
  * Unit tests
  */
 describe('StringToken', () => {
-  it('should do autocomplete', () => {
-    let token = new StringToken({ values : ["foo"]});
-    let res = token.checkAndRemove("f");
-    expect(res.autocomplete[0]).to.eq("foo");
+  it('should do autocomplete', (done) => {
+    let token = new StringToken({ values: ["foo"] });
+    let res = token.checkAndRemove("f").then(res => {
+      expect(res.autocomplete[0]).to.eq("foo");
+      done();
+    });
+    
   });
-  it('should do autocomplete + fix', () => {
-    let token = new StringToken({ values : ["foo"]});
-    let res = token.checkAndRemove("fa");
-    expect(res.autocomplete[0]).to.eq("foo");
+  it('should do autocomplete + fix', (done) => {
+    let token = new StringToken({ values: ["foo"] });
+    let res = token.checkAndRemove("fa").then(res => {
+      expect(res.autocomplete[0]).to.eq("foo");
+      done();
+    });
   });
 
 

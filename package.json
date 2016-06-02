@@ -26,5 +26,9 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^2.5.3"
+  },
+  "dependencies": {
+    "es6-promise": "^3.2.1",
+    "es6-shim": "^0.35.1"
   }
 }

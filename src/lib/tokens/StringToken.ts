@@ -32,8 +32,8 @@ export default class StringToken extends TokenBase {
         }
       }
     });
-
-    return result;
+    
+    return Promise.resolve(result);
   }
 
 

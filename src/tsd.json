@@ -16,6 +16,9 @@
     },
     "chai/chai.d.ts": {
       "commit": "7ad4e09016898d9c4837e250121fef2aedbecaaa"
+    },
+    "es6-shim/es6-shim.d.ts": {
+      "commit": "edb64e4a35896510ce02b93c0bca5ec3878db738"
     }
   }
 }

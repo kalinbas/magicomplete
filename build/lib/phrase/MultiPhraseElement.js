@@ -48,13 +48,16 @@ var MultiPhraseElement = (function (_super) {
     };
     MultiPhraseElement.prototype.checkOrder = function (toCheck, original) {
         var lastIndex = -1;
+        var ok = true;
         toCheck.forEach(function (item) {
             var index = original.indexOf(item);
-            if (index < lastIndex)
-                return false;
+            if (index < lastIndex) {
+                ok = false;
+                return;
+            }
             lastIndex = index;
         });
-        return true;
+        return ok;
     };
     return MultiPhraseElement;
 }(PhraseElementBase_1.default));

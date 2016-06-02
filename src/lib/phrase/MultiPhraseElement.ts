@@ -47,14 +47,15 @@ export default class MultiPhraseElement extends PhraseElementBase {
     return output;
   }
 
-  checkOrder(toCheck:PhraseElementBase[], original:PhraseElementBase[]) {
+  checkOrder(toCheck:PhraseElementBase[], original:PhraseElementBase[]):boolean {
       let lastIndex:number = -1;
+      let ok:boolean = true;
       toCheck.forEach(item => {
         let index = original.indexOf(item);
-        if (index < lastIndex) return false;
+        if (index < lastIndex) { ok = false; return; }
         lastIndex = index;
       });
-      return true;
+      return ok;
   }
 }
 

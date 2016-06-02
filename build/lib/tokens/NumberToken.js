@@ -30,7 +30,7 @@ var NumberToken = (function (_super) {
                 result.autocomplete.push(this.options.max + "");
             }
         }
-        return result;
+        return Promise.resolve(result);
     };
     return NumberToken;
 }(TokenBase_1.default));
