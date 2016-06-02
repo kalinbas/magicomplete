@@ -1,5 +1,12 @@
 // use service from magicomplete library
-var service = new magicomplete.Service({ phrases: ["test|other|whatever"], tokens: {} });
+
+var service = null;
+rebuild();
+
+function rebuild() {
+    var phrases = $("#definition").val().split('\n');
+    service = new magicomplete.Service({ phrases: phrases, tokens: {} });    
+}
 
 $(function () {
     var options = [];
