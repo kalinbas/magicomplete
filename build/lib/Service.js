@@ -13,6 +13,33 @@ var Service = (function () {
             _this.addTree(tree, _this.root);
         });
     }
+    Service.prototype.search = function (text) {
+        var state = new StateNode_1.default();
+        state.node = this.root;
+        state.baseText = "";
+        state.searchText = text.trim().toLowerCase();
+        var searchState = new SearchState();
+        searchState.text = state.searchText;
+        return this.searchChildren(state, searchState).then(function () {
+            var result = new ServiceResult();
+            if (searchState.finalState !== null) {
+                result.isReady = true;
+                var lastState = searchState.finalState;
+                while (lastState != null) {
+                    if (lastState.node.key != null) {
+                        result.captures[lastState.node.key] = lastState.capture;
+                    }
+                    lastState = lastState.previousState;
+                }
+            }
+            result.isAnything = searchState.isAnything;
+            result.autocomplete = searchState.autocomplete.filter(function (value, index, self) {
+                return self.indexOf(value) === index;
+            });
+            result.isInvalid = result.autocomplete.length === 0 && !result.isAnything && !result.isReady;
+            return result;
+        });
+    };
     Service.prototype.searchChildren = function (stateNode, searchState) {
         var _this = this;
         var promises = [];
@@ -43,93 +70,6 @@ var Service = (function () {
             promises.push(p);
         });
         return Promise.all(promises);
-    };
-    Service.prototype.search = function (text) {
-        var state = new StateNode_1.default();
-        state.node = this.root;
-        state.baseText = "";
-        state.searchText = text.trim().toLowerCase();
-        var searchState = new SearchState();
-        searchState.text = state.searchText;
-        return this.searchChildren(state, searchState).then(function () {
-            var result = new ServiceResult();
-            if (searchState.finalState !== null) {
-                result.isReady = true;
-                var lastState = searchState.finalState;
-                while (lastState != null) {
-                    if (lastState.node.key != null) {
-                        result.captures[lastState.node.key] = lastState.capture;
-                    }
-                    lastState = lastState.previousState;
-                }
-            }
-            result.isAnything = searchState.isAnything;
-            result.autocomplete = searchState.autocomplete.filter(function (value, index, self) {
-                return self.indexOf(value) === index;
-            });
-            result.isInvalid = result.autocomplete.length === 0 && !result.isAnything && !result.isReady;
-            return result;
-        });
-    };
-    Service.prototype.searchold = function (text) {
-        var result = new ServiceResult();
-        var states = [];
-        var finalState = null;
-        var promises = [];
-        var state = new StateNode_1.default();
-        state.node = this.root;
-        state.baseText = "";
-        state.searchText = text.trim().toLowerCase();
-        states.push(state);
-        var _loop_1 = function() {
-            var currentState = states.shift();
-            currentState.node.children.forEach(function (node) {
-                var p = node.token.checkAndRemove(currentState.searchText).then(function (check) {
-                    if (check.continuation !== null) {
-                        var newState = new StateNode_1.default();
-                        newState.searchText = check.continuation.trim().toLowerCase();
-                        newState.node = node;
-                        newState.baseText = check.continuation.length === 0 ? text : text.substr(0, text.lastIndexOf(check.continuation));
-                        newState.previousState = currentState;
-                        newState.capture = check.capture;
-                        states.push(newState);
-                        if (check.continuation.length === 0 && node.isEnd && check.isValid) {
-                            finalState = newState;
-                        }
-                    }
-                    if (check.isAnything) {
-                        result.isAnything = check.isAnything;
-                    }
-                    if (check.autocomplete) {
-                        check.autocomplete.forEach(function (val) {
-                            var full = currentState.baseText.length === 0 ? val : currentState.baseText + " " + val;
-                            result.autocomplete.push(full);
-                        });
-                    }
-                });
-                promises.push(p);
-            });
-        };
-        while (states.length > 0) {
-            _loop_1();
-        }
-        return Promise.all(promises).then(function () {
-            if (finalState !== null) {
-                result.isReady = true;
-                var lastState = finalState;
-                while (lastState != null) {
-                    if (lastState.node.key != null) {
-                        result.captures[lastState.node.key] = lastState.capture;
-                    }
-                    lastState = lastState.previousState;
-                }
-            }
-            result.autocomplete = result.autocomplete.filter(function (value, index, self) {
-                return self.indexOf(value) === index;
-            });
-            result.isInvalid = result.autocomplete.length === 0 && !result.isAnything && !result.isReady;
-            return result;
-        });
     };
     Service.prototype.addTree = function (node, attachToNode) {
         var _this = this;

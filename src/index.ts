@@ -8,6 +8,7 @@ import * as http from "http";
 import AutocompleteToken from './lib/tokens/AutocompleteToken';
 import CheckAndRemoveResult from './lib/tokens/CheckAndRemoveResult';
 
+
 let token = new AutocompleteToken({
 	minQueryLength: 2,
 	sourceUrlTemplate: "http://www.omdbapi.com/?s={q}",
@@ -15,6 +16,8 @@ let token = new AutocompleteToken({
 		return obj.Search.map(o => { return o.Title; });
 	}
 });
-token.checkAndRemove("The hobbit").then(res => {
+
+let service = new Service({ phrases : ["{movie:movie}"], tokens: { movie : token }})
+service.search("the hobbit").then(res => {
 	console.log(JSON.stringify(res));
-});
+})
