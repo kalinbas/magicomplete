@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "typings": "build/index",
   "scripts": {
-    "build": "tsc -p ./src && browserify ./build/index.js --standalone magicomplete -o ./build/dist/magicomplete.js",
+    "build": "tsc -p ./src && browserify ./build/index.js --standalone magicomplete -o ./dist/magicomplete.js",
     "test": "mocha ./build/test --recursive"
   },
   "repository": {
