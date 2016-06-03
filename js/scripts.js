@@ -1,21 +1,26 @@
-// use service from magicomplete library
-
-var service = null;
-rebuild();
-
-function rebuild() {
-    var phrases = $("#definition").val().split('\n');
-    service = new magicomplete.Service({ phrases: phrases, tokens: {} });    
-}
-
 $(function () {
     var options = [];
     var selectedOption = 0;
     var oldSearch = "";
+    var service = null;
 
-    // initial search
-    search("");
-    $("#search").focus();
+    // setup service
+    setup();
+
+    function setup() {
+        var phrases = $("#definition").val().split('\n');
+
+        // uses service from magicomplete library
+        service = new magicomplete.Service({ phrases: phrases, tokens: {} });
+
+        // set empty text
+        $("#search").val("");
+
+        $("#search").focus();
+
+        // initial search
+        search("");
+    }
 
     $("#search").keydown(function (e) {
         var code = (e.keyCode ? e.keyCode : e.which);
@@ -46,6 +51,10 @@ $(function () {
         } else {
             search($("#search").val());
         }
+    });
+
+    $("#definitionBtn").click(function () {
+        setup();
     });
 
     function selectOption(i) {
