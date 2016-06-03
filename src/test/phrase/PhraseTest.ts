@@ -73,6 +73,33 @@ describe('Phrase', () => {
         expect((<MultiPhraseElement>phrase.element).getOptions().elements).to.have.length(5);
     });
 
+    it('should work without options', () => {
+        let phrase = new Phrase("(test1|test2)");
+        expect(phrase.element).to.be.an.instanceof(MultiPhraseElement);
+        expect((<MultiPhraseElement>phrase.element).getOptions().elements).to.have.length(2);
+        expect((<MultiPhraseElement>phrase.element).getOptions().isOptional).to.be.false;
+        expect((<MultiPhraseElement>phrase.element).getOptions().min).to.equal(1);
+        expect((<MultiPhraseElement>phrase.element).getOptions().max).to.equal(1);
+    });
+    
+    it('should propagate quantifiers', () => {
+        let phrase = new Phrase("((test1|test2){1,1}){1,2}");
+        expect(phrase.element).to.be.an.instanceof(MultiPhraseElement);
+        expect((<MultiPhraseElement>phrase.element).getOptions().elements).to.have.length(2);
+        expect((<MultiPhraseElement>phrase.element).getOptions().isOptional).to.be.false;
+        expect((<MultiPhraseElement>phrase.element).getOptions().min).to.equal(1);
+        expect((<MultiPhraseElement>phrase.element).getOptions().max).to.equal(2);
+    });
+    
+     it('should propagate quantifiers II', () => {
+        let phrase = new Phrase("((test1|test2){1,1} other)");
+        expect(phrase.element).to.be.an.instanceof(MultiPhraseElement);
+        expect((<MultiPhraseElement>phrase.element).getOptions().elements).to.have.length(2);
+        expect((<MultiPhraseElement>phrase.element).getOptions().isOptional).to.be.false;
+        expect((<MultiPhraseElement>phrase.element).getOptions().min).to.equal(2);
+        expect((<MultiPhraseElement>phrase.element).getOptions().max).to.equal(2);
+    });
+
     it('should work with options', () => {
         let phrase = new Phrase("(test|test)?>{0,2}");
         expect((<MultiPhraseElement>phrase.element).getOptions().isOrdered).to.be.true;

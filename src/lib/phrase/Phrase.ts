@@ -135,14 +135,19 @@ export default class Phrase {
 
               // get elements of it
               let childElements:PhraseElementBase[];
+              
+              let childLengthMin = 1;  
+              let childLengthMax = 1;  
               if (childElement instanceof SinglePhraseElement) {
                 childElements = [childElement];
               } else {
                 childElements = (<MultiPhraseElement>childElement).getOptions().elements;
+                childLengthMin = (<MultiPhraseElement>childElement).getOptions().min;
+                childLengthMax = (<MultiPhraseElement>childElement).getOptions().max;
               }
 
-              let min = range.length > 0 ? parseInt(range[0], 10) : childElements.length;
-              let max = range.length > 1 ? parseInt(range[1], 10) : childElements.length;
+              let min = range.length > 0 ? parseInt(range[0], 10) : childLengthMin;
+              let max = range.length > 1 ? parseInt(range[1], 10) : childLengthMax;
 
               // fix wrong numbers
               min = Math.max(Math.min(childElements.length, min), 0);
