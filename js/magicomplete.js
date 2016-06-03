@@ -7149,14 +7149,18 @@ var Phrase = (function () {
                         var textInBrackets = text.substr(lastBlockStart, endIndex - lastBlockStart);
                         var childElement = this.parse(textInBrackets, level + 1);
                         var childElements = void 0;
+                        var childLengthMin = 1;
+                        var childLengthMax = 1;
                         if (childElement instanceof SinglePhraseElement_1.default) {
                             childElements = [childElement];
                         }
                         else {
                             childElements = childElement.getOptions().elements;
+                            childLengthMin = childElement.getOptions().min;
+                            childLengthMax = childElement.getOptions().max;
                         }
-                        var min = range.length > 0 ? parseInt(range[0], 10) : childElements.length;
-                        var max = range.length > 1 ? parseInt(range[1], 10) : childElements.length;
+                        var min = range.length > 0 ? parseInt(range[0], 10) : childLengthMin;
+                        var max = range.length > 1 ? parseInt(range[1], 10) : childLengthMax;
                         min = Math.max(Math.min(childElements.length, min), 0);
                         max = Math.max(Math.min(childElements.length, max), 0);
                         currentOrPart.push(new MultiPhraseElement_1.default({ elements: childElements, isOrdered: isOrdered, isOptional: isOptional, min: min, max: max }));
