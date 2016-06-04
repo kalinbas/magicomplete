@@ -26,7 +26,7 @@ export default class AutocompleteToken extends TokenBase {
         this.queryGetJsonService(text).then(json => {
           let values = this.options.sourceResultTransform(json);
           if (values) {
-            values.forEach(v => { this.valueCache.add(v); });
+            values.forEach(v => { this.valueCache.add(v.toLowerCase()); });
           }
           this.searchCache.add(text);
           resolve(this.getResultFromCache(text));

@@ -30,14 +30,14 @@ describe('AutocompleteToken', () => {
   });
 
   it('should get autocomplete values', done => {
-    token.checkAndRemove("The hobbit").then(res => {
+    token.checkAndRemove("the hobbit").then(res => {
       expect(res.autocomplete).to.have.length.gt(0);
       done();
     });
   });
 
   it('should accept complete values as valid', done => {
-    token.checkAndRemove("The Hobbit: An Unexpected Journey").then(res => {
+    token.checkAndRemove("the hobbit: an unexpected journey").then(res => {
       expect(res.isValid).to.be.true;
       done();
     });
