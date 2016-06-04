@@ -12,7 +12,8 @@ $(function () {
 
         // uses service from magicomplete library
         service = new magicomplete.Service({
-            phrases: phrases, tokens: [{
+            phrases: phrases, 
+            tokens: [{
                 key: "movies",
                 type: "autocomplete",
                 options: {
@@ -21,6 +22,13 @@ $(function () {
                     sourceResultTransform: function (obj) {
                         return obj.Search ? obj.Search.map(function (o) { return o.Title; }) : [];
                     }
+                }
+            }, {
+                key: "year",
+                type: "number",
+                options: {
+                    min: 1900,
+                    max: 2016
                 }
             }]
         });
