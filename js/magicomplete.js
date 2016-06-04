@@ -6831,31 +6831,47 @@ function extend() {
 var Service_1 = require("./lib/Service");
 exports.Service = Service_1.default;
 var Service_2 = require("./lib/Service");
-var AutocompleteToken_1 = require('./lib/tokens/AutocompleteToken');
-var token = new AutocompleteToken_1.default({
-    minQueryLength: 2,
-    sourceUrlTemplate: "http://www.omdbapi.com/?s={q}",
-    sourceResultTransform: function (obj) {
-        return obj.Search.map(function (o) { return o.Title; });
-    }
+var service = new Service_2.default({
+    phrases: [
+        "{movies}"
+    ],
+    tokens: [
+        {
+            key: "movies",
+            type: "autocomplete",
+            options: {
+                minQueryLength: 2,
+                sourceUrlTemplate: "http://www.omdbapi.com/?s={q}",
+                sourceResultTransform: function (obj) {
+                    return obj.Search.map(function (o) { return o.Title; });
+                }
+            }
+        }
+    ]
 });
-var service = new Service_2.default({ phrases: ["{movie:movie}"], tokens: { movie: token } });
 service.search("the hobbit").then(function (res) {
     console.log(JSON.stringify(res));
 });
 
-},{"./lib/Service":35,"./lib/tokens/AutocompleteToken":42}],35:[function(require,module,exports){
+},{"./lib/Service":35}],35:[function(require,module,exports){
 "use strict";
 var TokenNode_1 = require('./TokenNode');
 var StateNode_1 = require('./StateNode');
 var Phrase_1 = require('./phrase/Phrase');
+var TokenFactory_1 = require('./tokens/TokenFactory');
 var Service = (function () {
     function Service(options) {
         var _this = this;
         this.options = options;
         this.root = new TokenNode_1.default();
+        this.tokens = {};
+        if (options.tokens) {
+            options.tokens.forEach(function (t) {
+                _this.tokens[t.key] = TokenFactory_1.default.createToken(t);
+            });
+        }
         options.phrases.forEach(function (p) {
-            var phrase = new Phrase_1.default(p, options.tokens);
+            var phrase = new Phrase_1.default(p, _this.tokens);
             var tree = phrase.toTree();
             _this.addTree(tree, _this.root);
         });
@@ -6961,7 +6977,7 @@ var ServiceResult = (function () {
 }());
 exports.ServiceResult = ServiceResult;
 
-},{"./StateNode":36,"./TokenNode":37,"./phrase/Phrase":39}],36:[function(require,module,exports){
+},{"./StateNode":36,"./TokenNode":37,"./phrase/Phrase":39,"./tokens/TokenFactory":47}],36:[function(require,module,exports){
 "use strict";
 var StateNode = (function () {
     function StateNode() {
@@ -7057,7 +7073,7 @@ var MultiPhraseElement = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = MultiPhraseElement;
 
-},{"../TokenNode":37,"../util/ArrayUtil":46,"./PhraseElementBase":40}],39:[function(require,module,exports){
+},{"../TokenNode":37,"../util/ArrayUtil":48,"./PhraseElementBase":40}],39:[function(require,module,exports){
 "use strict";
 var StringToken_1 = require('../tokens/StringToken');
 var SinglePhraseElement_1 = require('./SinglePhraseElement');
@@ -7115,8 +7131,8 @@ var Phrase = (function () {
                     }
                     lastBlockStart = i + 1;
                     if (!this.tokens[nameValues[0]])
-                        throw new Error("Missing token configuration with name " + nameValues[0]);
-                    currentOrPart.push(new SinglePhraseElement_1.default({ token: this.tokens[nameValues[0]], isOptional: isOptional, key: nameValues[1] }));
+                        throw new Error("Missing token configuration with key " + nameValues[0]);
+                    currentOrPart.push(new SinglePhraseElement_1.default({ token: this.tokens[nameValues[0]], isOptional: isOptional, key: nameValues[1] || nameValues[0] }));
                 }
             }
             if (c === '(') {
@@ -7197,7 +7213,7 @@ var Phrase = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Phrase;
 
-},{"../TokenNode":37,"../tokens/StringToken":44,"./MultiPhraseElement":38,"./SinglePhraseElement":41}],40:[function(require,module,exports){
+},{"../TokenNode":37,"../tokens/StringToken":45,"./MultiPhraseElement":38,"./SinglePhraseElement":41}],40:[function(require,module,exports){
 "use strict";
 var PhraseElementBase = (function () {
     function PhraseElementBase() {
@@ -7328,7 +7344,7 @@ var AutocompleteToken = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = AutocompleteToken;
 
-},{"../util/StringUtil":47,"./CheckAndRemoveResult":43,"./TokenBase":45,"http":24}],43:[function(require,module,exports){
+},{"../util/StringUtil":49,"./CheckAndRemoveResult":43,"./TokenBase":46,"http":24}],43:[function(require,module,exports){
 "use strict";
 var CheckAndRemoveResult = (function () {
     function CheckAndRemoveResult() {
@@ -7344,6 +7360,46 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = CheckAndRemoveResult;
 
 },{}],44:[function(require,module,exports){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var TokenBase_1 = require('./TokenBase');
+var CheckAndRemoveResult_1 = require('./CheckAndRemoveResult');
+var NumberToken = (function (_super) {
+    __extends(NumberToken, _super);
+    function NumberToken(options) {
+        _super.call(this);
+        this.options = options;
+    }
+    NumberToken.prototype.checkAndRemove = function (text) {
+        var result = new CheckAndRemoveResult_1.default();
+        var regex = new RegExp('^(\d*\.?\d+)');
+        var match = regex.exec(text);
+        if (match) {
+            var num = parseInt(match[1], 10);
+            if (num >= this.options.min && num <= this.options.max) {
+                result.isValid = true;
+                result.capture = match[1];
+                result.continuation = text.substr(match[1].length);
+            }
+            else if (num < this.options.min) {
+                result.autocomplete.push(this.options.min + "");
+            }
+            else if (num > this.options.max) {
+                result.autocomplete.push(this.options.max + "");
+            }
+        }
+        return Promise.resolve(result);
+    };
+    return NumberToken;
+}(TokenBase_1.default));
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = NumberToken;
+
+},{"./CheckAndRemoveResult":43,"./TokenBase":46}],45:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -7386,7 +7442,7 @@ var StringToken = (function (_super) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = StringToken;
 
-},{"../util/StringUtil":47,"./CheckAndRemoveResult":43,"./TokenBase":45}],45:[function(require,module,exports){
+},{"../util/StringUtil":49,"./CheckAndRemoveResult":43,"./TokenBase":46}],46:[function(require,module,exports){
 "use strict";
 var TokenBase = (function () {
     function TokenBase() {
@@ -7396,7 +7452,32 @@ var TokenBase = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = TokenBase;
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
+"use strict";
+var AutocompleteToken_1 = require('./AutocompleteToken');
+var StringToken_1 = require('./StringToken');
+var NumberToken_1 = require('./NumberToken');
+var TokenFactory = (function () {
+    function TokenFactory() {
+    }
+    TokenFactory.createToken = function (definition) {
+        switch (definition.type) {
+            case 'autocomplete':
+                return new AutocompleteToken_1.default(definition.options);
+            case 'string':
+                return new StringToken_1.default(definition.options);
+            case 'number':
+                return new NumberToken_1.default(definition.options);
+            default:
+                throw new Error("Unknown token type: " + definition.type);
+        }
+    };
+    return TokenFactory;
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = TokenFactory;
+
+},{"./AutocompleteToken":42,"./NumberToken":44,"./StringToken":45}],48:[function(require,module,exports){
 "use strict";
 var ArrayUtil = (function () {
     function ArrayUtil() {
@@ -7442,7 +7523,7 @@ var ArrayUtil = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ArrayUtil;
 
-},{}],47:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 var StringUtil = (function () {
     function StringUtil() {

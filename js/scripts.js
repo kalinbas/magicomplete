@@ -11,7 +11,19 @@ $(function () {
         var phrases = $("#definition").val().split('\n');
 
         // uses service from magicomplete library
-        service = new magicomplete.Service({ phrases: phrases, tokens: {} });
+        service = new magicomplete.Service({
+            phrases: phrases, tokens: [{
+                key: "movies",
+                type: "autocomplete",
+                options: {
+                    minQueryLength: 2,
+                    sourceUrlTemplate: "http://www.omdbapi.com/?s={q}",
+                    sourceResultTransform: function (obj) {
+                        return obj.Search ? obj.Search.map(function (o) { return o.Title; }) : [];
+                    }
+                }
+            }]
+        });
 
         // set empty text
         $("#search").val("");
