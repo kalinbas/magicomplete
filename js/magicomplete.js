@@ -7287,7 +7287,7 @@ var AutocompleteToken = (function (_super) {
                 _this.queryGetJsonService(text).then(function (json) {
                     var values = _this.options.sourceResultTransform(json);
                     if (values) {
-                        values.forEach(function (v) { _this.valueCache.add(v); });
+                        values.forEach(function (v) { _this.valueCache.add(v.toLowerCase()); });
                     }
                     _this.searchCache.add(text);
                     resolve(_this.getResultFromCache(text));
