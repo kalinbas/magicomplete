@@ -25,13 +25,18 @@ describe('AutocompleteToken', () => {
   it('should respect minlength', done => {
     token.checkAndRemove("t").then(res => {
       expect(res.autocomplete).to.have.length(0);
+      expect(res.isAnything).to.be.true;
       done();
     });
   });
+  
+  
 
   it('should get autocomplete values', done => {
-    token.checkAndRemove("the hobbit").then(res => {
+    token.checkAndRemove("the hobbit").then(res => {     
       expect(res.autocomplete).to.have.length.gt(0);
+      expect(res.isValid).to.be.true;
+      expect(res.isAnything).to.be.false;
       done();
     });
   });
@@ -39,6 +44,7 @@ describe('AutocompleteToken', () => {
   it('should accept complete values as valid', done => {
     token.checkAndRemove("the hobbit: an unexpected journey").then(res => {
       expect(res.isValid).to.be.true;
+      expect(res.isAnything).to.be.false;
       done();
     });
   });

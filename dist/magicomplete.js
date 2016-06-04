@@ -7319,6 +7319,10 @@ var AutocompleteToken = (function (_super) {
     };
     AutocompleteToken.prototype.getResultFromCache = function (text) {
         var result = new CheckAndRemoveResult_1.default();
+        if (!text || text.length < this.options.minQueryLength) {
+            result.isAnything = true;
+            return result;
+        }
         this.valueCache.forEach(function (val) {
             if (text.indexOf(val) === 0) {
                 result.isValid = true;

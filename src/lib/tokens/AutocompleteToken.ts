@@ -65,6 +65,11 @@ export default class AutocompleteToken extends TokenBase {
 
     var result = new CheckAndRemoveResult();
 
+    if (!text || text.length < this.options.minQueryLength) {
+      result.isAnything = true; 
+      return result;
+    }
+
     this.valueCache.forEach(val => {
       // if text starts with value
       if (text.indexOf(val) === 0) {
