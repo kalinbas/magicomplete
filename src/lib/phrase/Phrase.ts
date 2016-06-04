@@ -86,9 +86,9 @@ export default class Phrase {
             //set new block starting point
             lastBlockStart = i + 1;
 
-            if (!this.tokens[nameValues[0]]) throw new Error("Missing token configuration with name " + nameValues[0]);
+            if (!this.tokens[nameValues[0]]) throw new Error("Missing token configuration with key " + nameValues[0]);
 
-            currentOrPart.push(new SinglePhraseElement({ token : this.tokens[nameValues[0]], isOptional : isOptional, key : nameValues[1] }));
+            currentOrPart.push(new SinglePhraseElement({ token : this.tokens[nameValues[0]], isOptional : isOptional, key : nameValues[1] || nameValues[0] }));
           }
         }
 

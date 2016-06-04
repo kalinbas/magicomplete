@@ -2,14 +2,27 @@ import TokenNode from './TokenNode';
 import StateNode from './StateNode';
 import Phrase from './phrase/Phrase';
 
+import {default as TokenFactory, ITokenDefinition} from './tokens/TokenFactory';
+
 export default class Service {
 
   root: TokenNode;
+  tokens: any;
 
   constructor(private options: IServiceOptions) {
     this.root = new TokenNode();
+    this.tokens = {};
+
+    // create tokens
+    if (options.tokens) {
+      options.tokens.forEach(t => {
+        this.tokens[t.key] = TokenFactory.createToken(t);
+      });
+    }
+
+    // create phrases
     options.phrases.forEach(p => {
-      let phrase = new Phrase(p, options.tokens);
+      let phrase = new Phrase(p, this.tokens);
       let tree = phrase.toTree();
       this.addTree(tree, this.root);
     });
@@ -120,7 +133,7 @@ export default class Service {
 
 export interface IServiceOptions {
   phrases: string[],
-  tokens?: any
+  tokens?: ITokenDefinition[]
 }
 
 export class SearchState {

@@ -28,12 +28,14 @@ describe('Service', () => {
 
   it('should do simple search with optionals', (done) => {
 
-    let token = new StringToken({ values: ["a movie"] });
-
     let service = new Service({
       phrases: [
         "i want to see {token:token1} {token:token2}"
-      ], tokens: { token: token }
+      ], tokens: [{
+        key: "token",
+        type: "string",
+        options: { values: ["a movie"] }
+      }]
     });
 
     service.search("i want to see a movie a movie").then(result => {

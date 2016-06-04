@@ -3,7 +3,7 @@ import CheckAndRemoveResult from './CheckAndRemoveResult';
 
 export default class NumberToken extends TokenBase {
 
-  constructor(private options:INumberTokenOptions) {
+  constructor(private options:any) {
     super();
   }
 

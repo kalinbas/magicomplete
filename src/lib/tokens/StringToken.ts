@@ -5,7 +5,7 @@ import StringUtil from '../util/StringUtil';
 
 export default class StringToken extends TokenBase {
 
-  constructor(private options:IStringTokenOptions) {
+  constructor(private options:any) {
     super();
   }
 
