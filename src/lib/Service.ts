@@ -28,7 +28,7 @@ export default class Service {
     });
   }
 
-  search(text: string): Promise<ServiceResult> {
+  search(text: string, count: number = 5): Promise<ServiceResult> {
 
     // root state to start search from
     let state = new StateNode();
@@ -66,7 +66,7 @@ export default class Service {
       // collect distinct autocomplete values
       result.autocomplete = searchState.autocomplete.filter((value, index, self) => {
         return self.indexOf(value) === index;
-      });
+      }).slice(0, count);
 
       // invalid if not ready / no autocomplete / not anything
       result.isInvalid = result.autocomplete.length === 0 && !result.isAnything && !result.isReady;

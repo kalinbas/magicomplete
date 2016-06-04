@@ -6876,7 +6876,8 @@ var Service = (function () {
             _this.addTree(tree, _this.root);
         });
     }
-    Service.prototype.search = function (text) {
+    Service.prototype.search = function (text, count) {
+        if (count === void 0) { count = 5; }
         var state = new StateNode_1.default();
         state.node = this.root;
         state.baseText = "";
@@ -6898,7 +6899,7 @@ var Service = (function () {
             result.isAnything = searchState.isAnything;
             result.autocomplete = searchState.autocomplete.filter(function (value, index, self) {
                 return self.indexOf(value) === index;
-            });
+            }).slice(0, count);
             result.isInvalid = result.autocomplete.length === 0 && !result.isAnything && !result.isReady;
             return result;
         });
@@ -7380,8 +7381,7 @@ var NumberToken = (function (_super) {
     }
     NumberToken.prototype.checkAndRemove = function (text) {
         var result = new CheckAndRemoveResult_1.default();
-        var regex = new RegExp('^(\d*\.?\d+)');
-        var match = regex.exec(text);
+        var match = /^(\d*\.?\d+)/.exec(text);
         if (match) {
             var num = parseInt(match[1], 10);
             if (num >= this.options.min && num <= this.options.max) {
@@ -7390,11 +7390,14 @@ var NumberToken = (function (_super) {
                 result.continuation = text.substr(match[1].length);
             }
             else if (num < this.options.min) {
-                result.autocomplete.push(this.options.min + "");
+                result.isAnything = true;
             }
             else if (num > this.options.max) {
                 result.autocomplete.push(this.options.max + "");
             }
+        }
+        if (!text) {
+            result.isAnything = true;
         }
         return Promise.resolve(result);
     };
