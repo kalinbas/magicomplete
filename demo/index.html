@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <title>MagiComplete by kalinbas</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+  <link href='css/styles.css' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+  <div>    
+    <div style="max-width:1000px;margin:100px auto;">
+      <textarea id="definition" style="width:100%;" rows="6">i want to find (the best|the newest|the best rated) (action|adventure|animation)?>{1,2} movies
+i want to search by title {movies}</textarea>        
+      <button id="definitionBtn">Rebuild Service</button>
+      
+      <h1>what do you want?</h1>
+      
+      <div id="searchContainer" style="position:relative;">
+        <input autocomplete="off" spellcheck="false" id="search" type="text" style="height:60px;width:100%;position:absolute;z-index:2;background-color:transparent;border:none;outline: none;padding:10px;"
+          value="" />
+        <input autocomplete="off" spellcheck="false" id="searchShadow" type="text" style="height:60px;width:100%;position:absolute;z-index:1;border:none;outline: none;padding:10px;color:#AAA;"
+          disabled="disabled" value="" />
+
+        <ul id="suggestions"></ul>
+        <div class="loader" style="position:absolute;z-index:1000;margin:0;right:8px;top:-8px;display:none;">Loading...</div>
+      </div>
+      <div id="result" style="margin-top: 100px;">
+
+      </div>
+
+    </div>
+  </div>
+  <script src="js/jquery-2.2.4.min.js"></script>
+  <script src="js/magicomplete.js"></script>
+  <script src="js/scripts.js"></script>
+</body>
+
+</html>
