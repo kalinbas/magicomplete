@@ -7,7 +7,7 @@ This is an experimental natural language autocomplete library written in TypeScr
 
 It is done as a learning project for npm library / node.js / typescript development.
 
-##Demo (best way to understand how it works)
+##Demo
 
 http://kalinbas.github.io/magicomplete
 
