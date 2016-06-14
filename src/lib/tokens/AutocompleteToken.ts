@@ -21,14 +21,14 @@ export default class AutocompleteToken extends TokenBase {
     let p = new Promise<CheckAndRemoveResult>((resolve, reject) => {
 
       // query autocomplete if not yet done
-      if (!this.searchCache.has(text) && text.length >= this.options.minQueryLength) {
+      if (!this.searchCache.has(text.toLowerCase()) && text.length >= this.options.minQueryLength) {
         
         this.queryGetJsonService(text).then(json => {
           let values = this.options.sourceResultTransform(json);
           if (values) {
-            values.forEach(v => { this.valueCache.add(v.toLowerCase()); });
+            values.forEach(v => { this.valueCache.add(v); });
           }
-          this.searchCache.add(text);
+          this.searchCache.add(text.toLowerCase());
           resolve(this.getResultFromCache(text));
         });
       } else {
@@ -63,7 +63,8 @@ export default class AutocompleteToken extends TokenBase {
 
   private getResultFromCache(text: string): CheckAndRemoveResult {
 
-    var result = new CheckAndRemoveResult();
+    let result = new CheckAndRemoveResult();
+    let foundLength = 0;
 
     if (!text || text.length < this.options.minQueryLength) {
       result.isAnything = true; 
@@ -72,18 +73,22 @@ export default class AutocompleteToken extends TokenBase {
 
     this.valueCache.forEach(val => {
       // if text starts with value
-      if (text.indexOf(val) === 0) {
-        result.isValid = true;
-        result.capture = val;
-        result.continuation = text.substr(val.length);
+      if (text.toLowerCase().indexOf(val.toLowerCase()) === 0) {
+        // find longest possible match
+        if (val.length > foundLength) {
+          result.isValid = true;
+          result.capture = val;
+          result.continuation = text.substr(val.length);
+          foundLength = val.length;
+        }
       }
       // if value starts with text
       if (text.length < val.length) {
-        if (val.indexOf(text) === 0) {
+        if (val.toLowerCase().indexOf(text.toLowerCase()) >= 0) {
           result.autocomplete.push(val);
         } else {
           // if text is similar to text
-          let dist = StringUtil.levenshteinDistance(text, val.substr(0, text.length));
+          let dist = StringUtil.levenshteinDistance(text.toLowerCase(), val.substr(0, text.length).toLowerCase());
           if (dist <= 2) {
             result.autocomplete.push(val);
           }

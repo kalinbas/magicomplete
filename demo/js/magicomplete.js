@@ -6830,30 +6830,14 @@ function extend() {
 "use strict";
 var Service_1 = require("./lib/Service");
 exports.Service = Service_1.default;
-var Service_2 = require("./lib/Service");
-var service = new Service_2.default({
-    phrases: [
-        "{movies}"
-    ],
-    tokens: [
-        {
-            key: "movies",
-            type: "autocomplete",
-            options: {
-                minQueryLength: 2,
-                sourceUrlTemplate: "http://www.omdbapi.com/?s={q}",
-                sourceResultTransform: function (obj) {
-                    return obj.Search.map(function (o) { return o.Title; });
-                }
-            }
-        }
-    ]
-});
-service.search("the hobbit").then(function (res) {
-    console.log(JSON.stringify(res));
-});
+var NumberToken_1 = require("./lib/tokens/NumberToken");
+exports.NumberToken = NumberToken_1.default;
+var StringToken_1 = require("./lib/tokens/StringToken");
+exports.StringToken = StringToken_1.default;
+var AutocompleteToken_1 = require("./lib/tokens/AutocompleteToken");
+exports.AutocompleteToken = AutocompleteToken_1.default;
 
-},{"./lib/Service":35}],35:[function(require,module,exports){
+},{"./lib/Service":35,"./lib/tokens/AutocompleteToken":42,"./lib/tokens/NumberToken":44,"./lib/tokens/StringToken":45}],35:[function(require,module,exports){
 "use strict";
 var TokenNode_1 = require('./TokenNode');
 var StateNode_1 = require('./StateNode');
@@ -6871,9 +6855,11 @@ var Service = (function () {
             });
         }
         options.phrases.forEach(function (p) {
-            var phrase = new Phrase_1.default(p, _this.tokens);
-            var tree = phrase.toTree();
-            _this.addTree(tree, _this.root);
+            if (p && p.length > 0) {
+                var phrase = new Phrase_1.default(p, _this.tokens);
+                var tree = phrase.toTree();
+                _this.addTree(tree, _this.root);
+            }
         });
     }
     Service.prototype.search = function (text, count) {
@@ -6881,7 +6867,7 @@ var Service = (function () {
         var state = new StateNode_1.default();
         state.node = this.root;
         state.baseText = "";
-        state.searchText = text.trim().toLowerCase();
+        state.searchText = text.trim();
         var searchState = new SearchState();
         searchState.text = state.searchText;
         return this.searchChildren(state, searchState).then(function () {
@@ -6911,7 +6897,7 @@ var Service = (function () {
             var p = node.token.checkAndRemove(stateNode.searchText).then(function (check) {
                 if (check.continuation !== null) {
                     var newState = new StateNode_1.default();
-                    newState.searchText = check.continuation.trim().toLowerCase();
+                    newState.searchText = check.continuation.trim();
                     newState.node = node;
                     newState.baseText = check.continuation.length === 0 ? searchState.text : searchState.text.substr(0, searchState.text.lastIndexOf(check.continuation));
                     newState.previousState = stateNode;
@@ -7104,7 +7090,7 @@ var Phrase = (function () {
         for (var i = 0; i < text.length; i++) {
             var c = text[i];
             if (bracketCount === 0) {
-                if (c === '(' || c === '{' || c === '|' || i === text.length - 1) {
+                if (c === '(' || c === '[' || c === '|' || i === text.length - 1) {
                     if (i - lastBlockStart > 0) {
                         var blockText = i === text.length - 1 ? text.substr(lastBlockStart) : text.substr(lastBlockStart, i - lastBlockStart);
                         blockText = blockText.trim();
@@ -7118,11 +7104,11 @@ var Phrase = (function () {
                     }
                     lastBlockStart = i + 1;
                 }
-                if (c === '{') {
-                    var endIndex = text.indexOf('}', i + 1);
+                if (c === '[') {
+                    var endIndex = text.indexOf(']', i + 1);
                     var isOptional = false;
                     if (endIndex === -1)
-                        throw new Error("Invalid configuration - missing } at " + i);
+                        throw new Error("Invalid configuration - missing ] at " + i);
                     var name_1 = text.substr(i + 1, endIndex - i - 1);
                     var nameValues = name_1.split(":");
                     i = endIndex;
@@ -7175,6 +7161,7 @@ var Phrase = (function () {
                             childElements = childElement.getOptions().elements;
                             childLengthMin = childElement.getOptions().min;
                             childLengthMax = childElement.getOptions().max;
+                            isOrdered = isOrdered || childElement.getOptions().isOrdered;
                         }
                         var min = range.length > 0 ? parseInt(range[0], 10) : childLengthMin;
                         var max = range.length > 1 ? parseInt(range[1], 10) : childLengthMax;
@@ -7284,13 +7271,13 @@ var AutocompleteToken = (function (_super) {
     AutocompleteToken.prototype.checkAndRemove = function (text) {
         var _this = this;
         var p = new Promise(function (resolve, reject) {
-            if (!_this.searchCache.has(text) && text.length >= _this.options.minQueryLength) {
+            if (!_this.searchCache.has(text.toLowerCase()) && text.length >= _this.options.minQueryLength) {
                 _this.queryGetJsonService(text).then(function (json) {
                     var values = _this.options.sourceResultTransform(json);
                     if (values) {
-                        values.forEach(function (v) { _this.valueCache.add(v.toLowerCase()); });
+                        values.forEach(function (v) { _this.valueCache.add(v); });
                     }
-                    _this.searchCache.add(text);
+                    _this.searchCache.add(text.toLowerCase());
                     resolve(_this.getResultFromCache(text));
                 });
             }
@@ -7320,22 +7307,26 @@ var AutocompleteToken = (function (_super) {
     };
     AutocompleteToken.prototype.getResultFromCache = function (text) {
         var result = new CheckAndRemoveResult_1.default();
+        var foundLength = 0;
         if (!text || text.length < this.options.minQueryLength) {
             result.isAnything = true;
             return result;
         }
         this.valueCache.forEach(function (val) {
-            if (text.indexOf(val) === 0) {
-                result.isValid = true;
-                result.capture = val;
-                result.continuation = text.substr(val.length);
+            if (text.toLowerCase().indexOf(val.toLowerCase()) === 0) {
+                if (val.length > foundLength) {
+                    result.isValid = true;
+                    result.capture = val;
+                    result.continuation = text.substr(val.length);
+                    foundLength = val.length;
+                }
             }
             if (text.length < val.length) {
-                if (val.indexOf(text) === 0) {
+                if (val.toLowerCase().indexOf(text.toLowerCase()) >= 0) {
                     result.autocomplete.push(val);
                 }
                 else {
-                    var dist = StringUtil_1.default.levenshteinDistance(text, val.substr(0, text.length));
+                    var dist = StringUtil_1.default.levenshteinDistance(text.toLowerCase(), val.substr(0, text.length).toLowerCase());
                     if (dist <= 2) {
                         result.autocomplete.push(val);
                     }
@@ -7381,13 +7372,17 @@ var NumberToken = (function (_super) {
     }
     NumberToken.prototype.checkAndRemove = function (text) {
         var result = new CheckAndRemoveResult_1.default();
-        var match = /^(\d*\.?\d+)/.exec(text);
+        var match = /^(\d+\.?\d*)(\s|$)/.exec(text);
         if (match) {
-            var num = parseInt(match[1], 10);
+            var num = parseFloat(match[1]);
             if (num >= this.options.min && num <= this.options.max) {
-                result.isValid = true;
-                result.capture = match[1];
-                result.continuation = text.substr(match[1].length);
+                if (Math.abs((num / this.options.step) - Math.round(num / this.options.step)) < 0.00000001) {
+                    result.isValid = true;
+                    result.capture = match[1];
+                    result.continuation = text.substr(match[1].length);
+                }
+                else {
+                }
             }
             else if (num < this.options.min) {
                 result.isAnything = true;
@@ -7424,18 +7419,22 @@ var StringToken = (function (_super) {
     }
     StringToken.prototype.checkAndRemove = function (text) {
         var result = new CheckAndRemoveResult_1.default();
+        var foundLength = 0;
         this.options.values.forEach(function (val) {
-            if (text.indexOf(val) === 0) {
-                result.isValid = true;
-                result.capture = val;
-                result.continuation = text.substr(val.length);
+            if (text.toLowerCase().indexOf(val.toLowerCase()) === 0) {
+                if (val.length > foundLength) {
+                    result.isValid = true;
+                    result.capture = val;
+                    result.continuation = text.substr(val.length);
+                    foundLength = val.length;
+                }
             }
             if (text.length < val.length) {
-                if (val.indexOf(text) === 0) {
+                if (val.toLowerCase().indexOf(text.toLowerCase()) === 0) {
                     result.autocomplete.push(val);
                 }
                 else {
-                    var dist = StringUtil_1.default.levenshteinDistance(text, val.substr(0, text.length));
+                    var dist = StringUtil_1.default.levenshteinDistance(text.toLowerCase(), val.substr(0, text.length).toLowerCase());
                     if (dist <= 2) {
                         result.autocomplete.push(val);
                     }

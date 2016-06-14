@@ -1,54 +1,39 @@
 [![GitHub version](https://badge.fury.io/gh/kalinbas%2Fmagicomplete.svg)](https://badge.fury.io/gh/kalinbas%2Fmagicomplete)
 [![Build Status](https://travis-ci.org/kalinbas/magicomplete.svg?branch=master)](https://travis-ci.org/kalinbas/magicomplete)
 
-MagiComplete
-====================
-This will soon be a complete, fully tested natural language autocomplete library written in TypeScript.
+#MagiComplete
+
+This is an experimental natural language autocomplete library written in TypeScript.
 
 It is done as a learning project for npm library / node.js / typescript development.
 
-Demo (best way to get the full experience)
----------------------
+##Demo (best way to understand how it works)
+
 http://kalinbas.github.io/magicomplete
 
-
-Included token types
----------------------
+##Included token types
 
 - String options
 - Numbers
-- Number ranges
-- Dates
-- Date ranges
-- Custom remote autocompletes (with caching)
-- ...
+- Custom remote JSON autocompletes (with caching)
+- more to come...
 
 
-How to use?
---------------------
+##How to use?
+
+###From Typescript / ES6:
+
+Get the package from npm
 
 `npm install magicomplete --save`
 
-ES6
-```typescript
-import Service from 'magicomplete';
-```
-or good, old TS import
-```typescript
-import Service = require('magicomplete');
-```
-or if you are plain, old, javascript guy
-```js
-var Service = require('magicomplete');
-```
+Then import it in your code
 
-Example
---------------------
 ```typescript
-import {Service, LookupToken, AutocompleteToken} from 'magicomplete';
+import {Service, StringToken, AutocompleteToken} from 'magicomplete';
 
-let genreToken = new LookupToken({values:['adventure', 'action', 'fantasy']});
-let yearToken = new LookupToken({min:1900, max:2016});
+let genreToken = new StringToken({values:['adventure', 'action', 'fantasy']});
+let yearToken = new StringToken({min:1900, max:2016});
 let actorToken = new AutocompleteToken(sourceFunction);
 
 let service = new Service({
@@ -61,20 +46,40 @@ let service = new Service({
 		actor:actorToken
 	}
 }); 
-let result = service.autocomplete("i")
 
-console.log(result); // ['i want to find', 'i'm looking for']
+service.search("i").then(result => {
+	console.log(result); // ['i want to find', 'i'm looking for']
+});
 ```
 
-Supported platforms
---------------------
+###From plain old Javascript:
+
+Get the built library file from this GitHub
+
+```html
+<script src="demo/js/magicomplete.js"></script>
+```
+
+then use the global magicomplete.Service constructor. 
+
+```js
+var service = new magicomplete.Service({
+	phrases: [ "(i want to find|i'm looking for) {genre} movies" ],
+	tokens: [ { key : 'genre', type: "string", options: { values: ["Action", "Adventure", "Animation"]}]	
+});
+
+service.search("i").then(function(result) {
+	console.log(result); // ['i want to find', 'i'm looking for']
+});
+```
+
+##Supported platforms
 
 - Every desktop and mobile browser
 - Node.js
 
 If it supports JavaScript, it probably supports this library.
 
-Contact
---------------------
+##Contact
 
 kalinbas AT gmail.com 

@@ -5,34 +5,40 @@ import StringUtil from '../util/StringUtil';
 
 export default class StringToken extends TokenBase {
 
-  constructor(private options:any) {
+  constructor(private options: any) {
     super();
   }
 
-  checkAndRemove(text:string) {
+  checkAndRemove(text: string) {
+
     let result = new CheckAndRemoveResult();
+    let foundLength = 0;
 
     this.options.values.forEach(val => {
       // if text starts with value
-      if (text.indexOf(val) === 0) {
-        result.isValid = true;
-        result.capture = val;
-        result.continuation = text.substr(val.length);
+      if (text.toLowerCase().indexOf(val.toLowerCase()) === 0) {
+        // find longest possible match
+        if (val.length > foundLength) {
+          result.isValid = true;
+          result.capture = val;
+          result.continuation = text.substr(val.length);
+          foundLength = val.length;
+        }
       }
       // if value starts with text
       if (text.length < val.length) {
-        if (val.indexOf(text) === 0) {
+        if (val.toLowerCase().indexOf(text.toLowerCase()) === 0) {
           result.autocomplete.push(val);
         } else {
           // if text is similar to text
-          let dist = StringUtil.levenshteinDistance(text, val.substr(0, text.length));
+          let dist = StringUtil.levenshteinDistance(text.toLowerCase(), val.substr(0, text.length).toLowerCase());
           if (dist <= 2) {
             result.autocomplete.push(val);
           }
         }
       }
     });
-    
+
     return Promise.resolve(result);
   }
 
@@ -40,5 +46,5 @@ export default class StringToken extends TokenBase {
 }
 
 export interface IStringTokenOptions {
-  values:string[];
+  values: string[];
 }

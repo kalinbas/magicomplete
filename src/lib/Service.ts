@@ -22,9 +22,11 @@ export default class Service {
 
     // create phrases
     options.phrases.forEach(p => {
-      let phrase = new Phrase(p, this.tokens);
-      let tree = phrase.toTree();
-      this.addTree(tree, this.root);
+      if (p && p.length > 0) {
+        let phrase = new Phrase(p, this.tokens);
+        let tree = phrase.toTree();
+        this.addTree(tree, this.root);
+      }
     });
   }
 
@@ -34,7 +36,7 @@ export default class Service {
     let state = new StateNode();
     state.node = this.root;
     state.baseText = "";
-    state.searchText = text.trim().toLowerCase();
+    state.searchText = text.trim();
 
     // search state object to collect / pass values
     let searchState = new SearchState();
@@ -83,7 +85,7 @@ export default class Service {
         // if check is continuing
         if (check.continuation !== null) {
           let newState = new StateNode();
-          newState.searchText = check.continuation.trim().toLowerCase();
+          newState.searchText = check.continuation.trim();
           newState.node = node;
           newState.baseText = check.continuation.length === 0 ? searchState.text : searchState.text.substr(0, searchState.text.lastIndexOf(check.continuation));
           newState.previousState = stateNode;

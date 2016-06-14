@@ -10,8 +10,8 @@ describe('Service', () => {
   it('should do simple search', (done) => {
     let service = new Service({
       phrases: [
-        "i want to",
-        "i would like to"
+        "I want to",
+        "I would like to"
       ]
     });
     service.search("i").then(result => {
@@ -19,8 +19,8 @@ describe('Service', () => {
       expect(result.isInvalid).to.be.false;
       expect(result.isAnything).to.be.false;
       expect(result.autocomplete).to.have.length(2);
-      expect(result.autocomplete[0]).to.eq("i want to");
-      expect(result.autocomplete[1]).to.eq("i would like to");
+      expect(result.autocomplete[0]).to.eq("I want to");
+      expect(result.autocomplete[1]).to.eq("I would like to");
       expect(result.captures).to.be.empty;
       done();
     });
@@ -30,7 +30,7 @@ describe('Service', () => {
 
     let service = new Service({
       phrases: [
-        "i want to see {token:token1} {token:token2}"
+        "I want to see [token:token1] [token:token2]"
       ], tokens: [{
         key: "token",
         type: "string",

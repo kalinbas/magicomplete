@@ -47,7 +47,7 @@ export default class Phrase {
         if (bracketCount === 0) {
 
           // maybe theres a block to be finished...
-          if (c === '(' || c === '{' || c === '|' || i === text.length - 1) {
+          if (c === '(' || c === '[' || c === '|' || i === text.length - 1) {
             // add simple text block
             if (i - lastBlockStart > 0) {
               let blockText = i === text.length - 1 ? text.substr(lastBlockStart) : text.substr(lastBlockStart, i - lastBlockStart);
@@ -67,11 +67,11 @@ export default class Phrase {
             lastBlockStart = i + 1;
           }
 
-          // parse named token {token} or {token:captureName} or {token:captureName}?
-          if (c === '{') {
-            let endIndex = text.indexOf('}', i + 1);
+          // parse named token [token] or [token:captureName] or [token:captureName]?
+          if (c === '[') {
+            let endIndex = text.indexOf(']', i + 1);
             let isOptional = false;
-            if (endIndex === -1) throw new Error("Invalid configuration - missing } at " + i);
+            if (endIndex === -1) throw new Error("Invalid configuration - missing ] at " + i);
 
             let name = text.substr(i + 1, endIndex - i - 1);
             let nameValues = name.split(":");
@@ -144,6 +144,9 @@ export default class Phrase {
                 childElements = (<MultiPhraseElement>childElement).getOptions().elements;
                 childLengthMin = (<MultiPhraseElement>childElement).getOptions().min;
                 childLengthMax = (<MultiPhraseElement>childElement).getOptions().max;
+                
+                // special case - child is ordered list - overwrite setting
+                isOrdered = isOrdered || (<MultiPhraseElement>childElement).getOptions().isOrdered;
               }
 
               let min = range.length > 0 ? parseInt(range[0], 10) : childLengthMin;
