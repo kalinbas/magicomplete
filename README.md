@@ -54,10 +54,10 @@ service.search("i").then(result => {
 
 ###From plain old Javascript:
 
-Get the built library file from this GitHub
+Get the built library file (from this GitHub)
 
 ```html
-<script src="demo/js/magicomplete.js"></script>
+<script src="demo/js/magicomplete.min.js"></script>
 ```
 
 then use the global magicomplete.Service constructor. 
