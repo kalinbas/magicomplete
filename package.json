@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "typings": "build/index",
   "scripts": {
-    "build": "tsc -p ./src && browserify ./build/index.js --standalone magicomplete -o ./demo/js/magicomplete.js",
+    "build": "tsc -p ./src && browserify ./build/index.js --standalone magicomplete -o ./demo/js/magicomplete.js && uglifyjs ./demo/js/magicomplete.js -o ./demo/js/magicomplete.min.js",
     "test": "mocha ./build/test --recursive"
   },
   "repository": {
@@ -28,7 +28,6 @@
     "mocha": "^2.5.3"
   },
   "dependencies": {
-    "es6-promise": "^3.2.1",
     "es6-shim": "^0.35.1"
   }
 }
