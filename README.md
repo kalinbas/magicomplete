@@ -5,8 +5,6 @@
 
 This is an experimental natural language autocomplete library written in TypeScript.
 
-It is done as a learning project for npm library / node.js / typescript development.
-
 ##Demo
 
 http://kalinbas.github.io/magicomplete
