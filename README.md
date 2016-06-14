@@ -30,21 +30,13 @@ Get the package from npm
 Then import it in your code
 
 ```typescript
-import {Service, StringToken, AutocompleteToken} from 'magicomplete';
+import {Service} from 'magicomplete';
 
 let genreToken = new StringToken({values:['adventure', 'action', 'fantasy']});
-let yearToken = new StringToken({min:1900, max:2016});
-let actorToken = new AutocompleteToken(sourceFunction);
 
 let service = new Service({
-	phrases: [
-		"(i want to find|i'm looking for) {genre} movies (from the year {year}|with {actor}|ordered by (asc|desc)){0,3}"
-	],
-	tokens: {
-		genre:genreToken,
-		year:yearToken,
-		actor:actorToken
-	}
+	phrases: [ "(i want to find|i'm looking for) [genre] movies" ],
+	tokens: [ { key : 'genre', type: "string", options: { values: ["Action", "Adventure", "Animation"]}	]
 }); 
 
 service.search("i").then(result => {
@@ -54,7 +46,7 @@ service.search("i").then(result => {
 
 ###From plain old Javascript:
 
-Get the built library file (from this GitHub)
+Get the built library file (from GitHub)
 
 ```html
 <script src="demo/js/magicomplete.min.js"></script>
@@ -64,7 +56,7 @@ then use the global magicomplete.Service constructor.
 
 ```js
 var service = new magicomplete.Service({
-	phrases: [ "(i want to find|i'm looking for) {genre} movies" ],
+	phrases: [ "(i want to find|i'm looking for) [genre] movies" ],
 	tokens: [ { key : 'genre', type: "string", options: { values: ["Action", "Adventure", "Animation"]}]	
 });
 
