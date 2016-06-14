@@ -30,8 +30,6 @@ Then import it in your code
 ```typescript
 import {Service} from 'magicomplete';
 
-let genreToken = new StringToken({values:['adventure', 'action', 'fantasy']});
-
 let service = new Service({
 	phrases: [ "(i want to find|i'm looking for) [genre] movies" ],
 	tokens: [ { key : 'genre', type: "string", options: { values: ["Action", "Adventure", "Animation"]}	]
@@ -69,6 +67,10 @@ service.search("i").then(function(result) {
 - Node.js
 
 If it supports JavaScript, it probably supports this library.
+
+##Using with existing Autocomplete libraries
+
+MagiComplete can be easily used with any Autocomplete library like jQuery UI or typeahead.js. Just create the service and set up the library to use the service.search() method instead of a remote datasource.
 
 ##Contact
 
